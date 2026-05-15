@@ -6,6 +6,9 @@ from django.contrib.auth.models import AbstractUser
 
 from django.utils import timezone
 
+"""
+    Device
+"""
 class Device(models.Model): 
     
     device_id = models.UUIDField(
@@ -26,7 +29,9 @@ class Device(models.Model):
     
     sync_timestamp = models.DateTimeField()
 
-
+"""
+    User
+"""
 class User(AbstractUser): 
     
     user_id = models.UUIDField(
