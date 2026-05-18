@@ -26,46 +26,43 @@ class ScheduleConfigApiView(APIView):
         GET Schedules for authenticated device
     """
     def get(self, request, format=None):
+        
+        last_sync = request.GET.get("last_sync")
+        force = request.GET.get("force", "false").lower() == "true"
 
-        last_sync = request.GET.get('last_sync')
-
-        if last_sync is None:
+        if not last_sync:
             return Response(
-                {
-                    "error": "Missing required GET parameter 'last_sync'"
-                },
+                {"error": "Missing required GET parameter 'last_sync'"},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         parsed_last_sync = parse_datetime(last_sync)
 
         if parsed_last_sync is None:
             return Response(
-                {
-                    "error": "Invalid datetime format for 'last_sync'"
-                },
+                {"error": "Invalid datetime format for 'last_sync'"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        device = Device.objects.get(pk=request.user.device_id)
+        if timezone.is_naive(parsed_last_sync):
+            parsed_last_sync = timezone.make_aware(parsed_last_sync)
 
-        if device.sync_timestamp is None or ((device.sync_timestamp - parsed_last_sync).microseconds > 0):
-            
+        device = request.user
+
+        if force or device.sync_timestamp is None or device.sync_timestamp > parsed_last_sync:
+
             schedules = Schedule.objects.filter(
-                box__device=device.device_id
+                box__device=device
             ).select_related("box")
 
-            serializer = ScheduleSerializer(
-                schedules,
-                many=True
-            )
+            serializer = ScheduleSerializer(schedules, many=True)
 
-            return Response(
-                data=serializer.data,
-                status=status.HTTP_200_OK
-            )
-        else:
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            device.sync_timestamp = timezone.now()
+            device.save(update_fields=["sync_timestamp"])
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
         
 """
