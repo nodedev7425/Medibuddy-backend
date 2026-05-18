@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from django.contrib.auth.decorators import login_required
 
 from rest_framework import status
 from rest_framework.decorators import APIView
@@ -106,3 +106,10 @@ class AlertApiView(GenericAPIView):
     def get(self, request, format=None):
         pass
      
+"""
+    UserAlert
+"""
+class UserAlertApiView(GenericAPIView):
+    
+    def get(self, request, format=None):
+        pass
