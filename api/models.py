@@ -6,6 +6,8 @@ from django.contrib.auth.models import AbstractUser
 
 from django.utils import timezone
 
+import secrets
+
 """
     Device
 """
@@ -27,7 +29,14 @@ class Device(models.Model):
         editable=False
     ) 
     
-    sync_timestamp = models.DateTimeField()
+    sync_timestamp = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+
+    @property
+    def is_authenticated(self):
+        return True
 
 """
     User
@@ -55,6 +64,16 @@ class Box(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False
+    )
+
+    box_index = models.SmallIntegerField(
+        default=0
+    )
+
+    display_name = models.CharField(
+       max_length=255,
+       null=True,
+       blank=True
     )
 
     device = models.ForeignKey(
@@ -121,7 +140,7 @@ class UserAlert(models.Model):
     )
 
     user = models.ForeignKey(
-        "User",
+        User,
         on_delete=models.CASCADE,
         related_name='user_alerts'
     )
@@ -136,3 +155,35 @@ class UserAlert(models.Model):
         null=True,
         blank=True
     )
+
+"""
+    DeviceToken
+"""
+class DeviceToken(models.Model):
+
+    device = models.OneToOneField(
+        Device,
+        on_delete=models.CASCADE,
+        related_name='token'
+    )
+
+    token = models.CharField(
+        max_length=64,
+        unique=True,
+        db_index=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    last_used_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = secrets.token_hex(32)
+
+        super().save(*args, **kwargs)
