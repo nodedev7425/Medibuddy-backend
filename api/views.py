@@ -16,11 +16,10 @@ from api.serializers import ScheduleSerializer
 """
     Schedules
 """
-class ScheduleConfigApiView(APIView):
+class ScheduleConfigApiView(GenericAPIView):
 
     authentication_classes = [DeviceAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = ScheduleSerializer
 
     """
         GET Schedules for authenticated device
