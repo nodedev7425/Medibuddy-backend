@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 from api.views import ScheduleConfigApiView, AlertApiView, UserAlertApiView
-from core.views import LoginView
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
