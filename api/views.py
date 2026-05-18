@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from drf_spectacular.types import OpenApiTypes
@@ -13,9 +14,9 @@ from django.utils.dateparse import parse_datetime
 from django.utils import timezone
 
 from api.models import Schedule, Alert
-from api.services import AlertService
+from api.services import AlertService, UserAlertService
 from api.auth import DeviceAuthentication
-from api.serializers import ScheduleSerializer
+from api.serializers import ScheduleSerializer, UserAlertSerializer
  
 
 
@@ -91,7 +92,7 @@ class ScheduleConfigApiView(GenericAPIView):
             serializer = ScheduleSerializer(schedules, many=True)
 
             device.sync_timestamp = timezone.now()
-            device.save(update_fields=["sync_timestamp"])
+            device.save(update_fields=['sync_timestamp'])
 
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -159,6 +160,22 @@ class AlertApiView(GenericAPIView):
     UserAlert
 """
 class UserAlertApiView(GenericAPIView):
-    
+
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        summary="Conditional trigger alert for missed schedule",
+        description="Conditional trigger alert for missed schedule",
+        tags=["Alerts"]
+    )
+
     def get(self, request, format=None):
-        pass
+
+        alerts = UserAlertService.get_available_alerts(request.user)
+
+        if alerts:
+            serializer = UserAlertSerializer(alerts, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

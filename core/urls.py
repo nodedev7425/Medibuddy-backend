@@ -17,20 +17,25 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from api.views import ScheduleConfigApiView, AlertApiView
+from api.views import ScheduleConfigApiView, AlertApiView, UserAlertApiView
+from core.views import LoginView
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('accounts/', include("django.contrib.auth.urls")),
     
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path(
-        "api/docs/",
+        'api/docs/',
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
 
     path('api/config', ScheduleConfigApiView.as_view(), name='api-config'),
-    path("api/alert", AlertApiView.as_view(), name='api-alert'),
+    path('api/alert', AlertApiView.as_view(), name='api-alert'),
+
+    path('api/alert/me', UserAlertApiView.as_view(), name='api-alert-me')
 ]

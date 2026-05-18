@@ -3,11 +3,18 @@ import logging
 from dateutil import rrule
 
 from django.db import transaction, IntegrityError
+from django.db.models.query import QuerySet
+
+from django.utils import timezone
 
 from api.models import Schedule, Alert, UserAlert, User
 
 logger = logging.getLogger(__name__)
 
+
+"""
+    AlertService
+"""
 class AlertService:
 
     """
@@ -79,3 +86,37 @@ class AlertService:
 
         return False
     
+
+"""
+    UserAlertService
+"""
+class UserAlertService:
+
+    """
+        Get available Alerts
+    """
+
+    @staticmethod
+    def get_available_alerts(user: User) -> list[UserAlert]:
+
+        alerts = list(
+            UserAlert.objects.filter(
+                user=user,
+                received__isnull=True
+            )
+        )
+
+        print(len(alerts))
+
+        if alerts:
+            now = timezone.now()
+
+            for user_alert in alerts:
+                user_alert.received = now
+
+            UserAlert.objects.bulk_update(
+                alerts,
+                ['received']
+            )
+
+        return alerts
