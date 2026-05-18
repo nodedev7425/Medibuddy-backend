@@ -6,6 +6,9 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
+
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
 
@@ -24,6 +27,34 @@ class ScheduleConfigApiView(GenericAPIView):
     """
         GET Schedules for authenticated device
     """
+
+    @extend_schema(
+        summary="Get schedules for authenticated device",
+        description="Returns all schedules if synchronization is required.",
+        parameters=[
+            OpenApiParameter(
+                name='last_sync',
+                type=OpenApiTypes.DATETIME,
+                location=OpenApiParameter.QUERY,
+                required=True,
+                description='Last synchronization timestamp'
+            ),
+            OpenApiParameter(
+                name='force',
+                type=OpenApiTypes.BOOL,
+                location=OpenApiParameter.QUERY,
+                required=False,
+                description='Force full sync'
+            ),
+        ],
+        responses={
+            200: ScheduleSerializer(many=True),
+            204: OpenApiResponse(description="No updates available"),
+            400: OpenApiResponse(description="Invalid request"),
+        },
+        tags=["Schedules"]
+    )
+
     def get(self, request, format=None):
         
         last_sync = request.GET.get("last_sync")
