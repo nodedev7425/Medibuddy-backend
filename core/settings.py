@@ -96,6 +96,9 @@ DATABASES = {
 
 AUTH_USER_MODEL = "api.User"
 
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 28
+SESSION_SAVE_EVERY_REQUEST = True
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -136,6 +139,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'api.auth.DeviceAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
 }
 
@@ -144,6 +148,10 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     'TITLE': 'MediBuddy Server API',
     'VERSION': '1.0.0',
+
+    "SWAGGER_UI_SETTINGS": {
+        "persistAuthorization": True,
+    },
 
     'SECURITY': {
         'ApiTokenAuth': {
