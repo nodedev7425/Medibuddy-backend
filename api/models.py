@@ -100,7 +100,11 @@ class Schedule(models.Model):
         related_name='schedules'
     )
 
-    start_time = models.DateTimeField()
+    display_name = models.CharField(
+       max_length=255,
+       null=True,
+       blank=True
+    ) 
 
     rule_string = models.CharField(
         max_length=255
