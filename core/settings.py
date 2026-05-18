@@ -138,3 +138,18 @@ REST_FRAMEWORK = {
         'api.auth.DeviceAuthentication',
     ]
 }
+
+#
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'MediBuddy Server API',
+    'VERSION': '1.0.0',
+
+    'SECURITY': {
+        'ApiTokenAuth': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'X-API-KEY',
+        }
+    },
+}
