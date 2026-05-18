@@ -8,8 +8,8 @@ django = "*"
 djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
-drf-yasg = "*"
-python-environ = "*"
+django-environ = "*"
+drf-spectacular = "*"
 
 [dev-packages]
 
