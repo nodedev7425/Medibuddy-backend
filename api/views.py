@@ -12,10 +12,13 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiRespon
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
 
-from api.models import Device, Schedule, Box
+from api.models import Schedule, Alert
+from api.services import AlertService
 from api.auth import DeviceAuthentication
 from api.serializers import ScheduleSerializer
  
+
+
 """
     Schedules
 """
@@ -103,9 +106,55 @@ class AlertApiView(GenericAPIView):
     authentication_classes = [DeviceAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary="Conditional trigger alert for missed schedule",
+        description="Conditional trigger alert for missed schedule",
+        parameters=[
+            OpenApiParameter(
+                name='schedule_id',
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.QUERY,
+                required=True,
+                description='The missed schedule'
+            ),
+        ],
+        responses={
+            400: OpenApiResponse(description="Invalid request"),
+        },
+        tags=["Alerts"]
+    )
+
     def get(self, request, format=None):
-        pass
+        
+        schedule_id = request.GET.get('schedule_id')
      
+        if not schedule_id:
+            return Response(
+                {"error": "Missing required GET parameter 'schedule_id'"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:    
+            schedule = Schedule.objects.get(
+                schedule_id=schedule_id
+            )
+        except Schedule.DoesNotExist:
+            return Response(
+                {"error": f"No schedule with ID '{schedule_id}' found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        trigger_time = timezone.now()
+
+        if AlertService.alert_exists(schedule, trigger_time):
+            return Response(status=status.HTTP_409_CONFLICT) 
+            
+        if not AlertService.create_alert(schedule_id):
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(status=status.HTTP_201_CREATED)
+
+
 """
     UserAlert
 """
