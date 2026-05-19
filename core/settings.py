@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_spectacular',
-    'api'
+    'api',
+    'tasks'
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,7 @@ SPECTACULAR_SETTINGS = {
         }
     },
 }
+
+# Tasks
+
+WIPE_INTERVAL = env('WIPE_INTERVAL')
