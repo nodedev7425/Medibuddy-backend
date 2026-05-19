@@ -10,7 +10,6 @@ markdown = "*"
 django-filter = "*"
 django-environ = "*"
 drf-spectacular = "*"
-faker = "*"
 python-dateutil = "*"
 
 [dev-packages]
