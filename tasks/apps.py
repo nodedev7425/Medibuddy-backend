@@ -4,8 +4,6 @@ import os
 from django.apps import AppConfig
 from django.conf import settings
 
-from tasks.clean_task import start_task
-
 class TasksConfig(AppConfig):
     name = 'tasks'
 
@@ -17,5 +15,8 @@ class TasksConfig(AppConfig):
             return
        
        if settings.DEBUG and os.environ.get("RUN_MAIN") == "true":
+        
+        from tasks.clean_task import start_task
+
         start_task()
 

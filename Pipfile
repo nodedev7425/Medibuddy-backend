@@ -8,10 +8,10 @@ django = "*"
 djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
-django-environ = "*"
 drf-spectacular = "*"
 python-dateutil = "*"
 apscheduler = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
