@@ -66,7 +66,6 @@ class Command(BaseCommand):
             for box in boxes:
                 Schedule.objects.create(
                     box=box, 
-                    start_time=timezone.now(), 
                     rule_string=str(
                         rrule(
                             freq=MONTHLY,
