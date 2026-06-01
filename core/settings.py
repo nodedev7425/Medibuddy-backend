@@ -30,7 +30,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG').lower() == "true"
 
-ALLOWED_HOSTS = os.getenv('SERVERNAMES').split(' ')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(' ')
 
 # Application definition
 
