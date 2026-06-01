@@ -19,6 +19,8 @@ $ pipenv install
 
 Then copy-paste the `.env.example` and change the settings according to your needs.
 
-## 3. Setup Demo environment
+## 3. Setup development environment
+
+
 
 
