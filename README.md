@@ -1,8 +1,8 @@
 # MediBuddy Server
 
-- [1. Requirements](#requirements)
-- [2. Getting started](#getting-started)
-- [3. Setup Demo environment](#setup-demo-environment)
+- [1. Requirements](#1-requirements)
+- [2. Getting started](#2-getting-started)
+- [3. Setup Demo environment](#3-setup-development-environment)
 
 ## 1. Requirements
 
