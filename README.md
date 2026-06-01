@@ -1,4 +1,7 @@
 # MediBuddy Server
+> This repository is part of a school project called "MediBuddy".
+> It is intended for educational purposes only.
+> There is no warranty for any real-world usage, and the documentation is designed for development and learning purposes.
 
 - [1. Requirements](#1-requirements)
 - [2. Getting started](#2-getting-started)
