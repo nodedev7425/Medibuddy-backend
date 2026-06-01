@@ -12,6 +12,7 @@ drf-spectacular = "*"
 python-dateutil = "*"
 apscheduler = "*"
 python-dotenv = "*"
+gunicorn = "*"
 
 [dev-packages]
 
