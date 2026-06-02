@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@source "../**/*.py";
+@source "../templates/**/*.html";
+
+@theme {
+  --color-primary: #1E5CB3;
+  --color-light: #D4E4F7;
+  --color-dark: #1F2937;
+  --color-hover: #4785DC
+}
+
+@utility bg-login {
+  background: linear-gradient(180deg, var(--color-dark) 0%, var(--color-primary) 100%);
+  min-height: 100vh;
+}

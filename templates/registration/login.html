@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+  </head>
+  <body class="bg-login min-h-screen flex justify-center bg-white my-20 mx-4">
+    <form method="post" class="w-lg h-full bg-light px-8 lg:px-12 py-12 rounded-lg shadow">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="text-dark mb-2">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+      {% endfor %}
+      <h1 class="text-primary font-semibold text-3xl mb-4 text-center">Anmeldung</h1>
+
+      <div class="mb-6 relative">
+          <img src="{% static 'icons/username.svg' %}" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+          <input type="text" name="username" id="id_username"
+                class="w-full border-none rounded px-3 py-2 bg-white pl-10"
+                placeholder="Benutzername" autocomplete="username">
+      </div>
+
+      <div class="mb-6 relative">
+          <img src="{% static 'icons/password.svg' %}" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" alt="">
+          <input type="password" name="password" id="id_password"
+                class="w-full border-none rounded px-3 py-2 bg-white pl-10"
+                placeholder="Passwort" autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="w-full bg-primary text-white py-2 rounded text-2xl hover:bg-hover">Anmelden</button>
+    </form>
+  </body>
+</html>
+
