@@ -13,7 +13,7 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiRespon
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
 
-from api.models import Schedule, Alert
+from api.models import Schedule, Alert, Device, Box, User
 from api.services import AlertService, UserAlertService
 from api.auth import DeviceAuthentication
 from api.serializers import ScheduleSerializer, UserAlertSerializer

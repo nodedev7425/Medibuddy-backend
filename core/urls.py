@@ -17,24 +17,39 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.contrib.auth.views import LoginView
+from api.forms import LoginForm
+
 from api.views import ScheduleConfigApiView, AlertApiView, UserAlertApiView
+from core.views import devices, device_detail, box_detail
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('login/', LoginView.as_view(
+        template_name="registration/login.html",
+        authentication_form=LoginForm
+    ), name='login'),
 
+    path('admin/', admin.site.urls),
     path('accounts/', include("django.contrib.auth.urls")),
     
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+
     path(
-        'api/docs/',
-        SpectacularSwaggerView.as_view(url_name="schema"),
-        name="swagger-ui",
+        'api/devices/<uuid:device_id>/',
+        device_detail,
+        name='device-detail'
+    ),
+
+    path(
+        'api/devices/<uuid:device_id>/boxes/<uuid:box_id>/',
+        box_detail,
+        name='box-detail'
     ),
 
     path('api/config', ScheduleConfigApiView.as_view(), name='api-config'),
     path('api/alert', AlertApiView.as_view(), name='api-alert'),
-
     path('api/alert/me', UserAlertApiView.as_view(), name='api-alert-me')
 ]
