@@ -34,6 +34,22 @@
 
       <button type="submit" class="w-full bg-primary text-white py-2 rounded text-2xl hover:bg-hover">Anmelden</button>
     </form>
+
+    <script>
+      if (
+          typeof AndroidAuth !== "undefined" &&
+          "cookieStore" in window
+      ) {
+          cookieStore.addEventListener("change", (event) => {
+              const sessionCookie =
+                  event.changed.find(cookie => cookie.name === "sessionid");
+
+              if (sessionCookie) {
+                  AndroidAuth.saveToken(sessionCookie.value);
+              }
+          });
+      }
+    </script>
   </body>
 </html>
 
