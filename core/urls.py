@@ -31,23 +31,25 @@ urlpatterns = [
         authentication_form=LoginForm
     ), name='login'),
 
-    path('admin/', admin.site.urls),
-    path('accounts/', include("django.contrib.auth.urls")),
-    
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path('', devices, name='devices'),
 
     path(
-        'api/devices/<uuid:device_id>/',
+        'device/<uuid:device_id>/',
         device_detail,
         name='device-detail'
     ),
 
     path(
-        'api/devices/<uuid:device_id>/boxes/<uuid:box_id>/',
+        'device/<uuid:device_id>/box/<uuid:box_id>/',
         box_detail,
         name='box-detail'
     ),
+
+    path('admin/', admin.site.urls),
+    path('accounts/', include("django.contrib.auth.urls")),
+    
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
 
     path('api/config', ScheduleConfigApiView.as_view(), name='api-config'),
     path('api/alert', AlertApiView.as_view(), name='api-alert'),
