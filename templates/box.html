@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <section class="py-8 px-14">
+        <div class="flex flex-row items-center justify-between mb-6">
+            <a href="{% url 'device-detail' device_id %}">
+                <img src="{% static 'icons/arrow-left.svg' %}" class="w-8 h-8">
+            </a>
+            <h1 class="text-2xl font-bold">{{ box.display_name }}</h1>
+            <div class="w-8"></div>
+        </div>
+
+        <div class="mb-8">
+            {% for item in schedules %}
+                <div class="bg-white p-4 rounded-xl shadow mb-3 flex justify-between items-center">
+                    <div>
+                        <p class="font-bold">{{ item.schedule.display_name }}</p>
+                        <p class="text-gray-500 text-sm">{{ item.formatted }}</p>
+                    </div>
+                    <form method="post" action="{% url 'schedule-delete' device_id box.box_id item.schedule.schedule_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-500 font-bold">✕</button>
+                    </form>
+                </div>
+            {% empty %}
+                <p class="text-gray-500">Keine Schedules vorhanden.</p>
+            {% endfor %}
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-lg font-bold mb-4">Neuer Schedule</h2>
+            <form method="post" action="{% url 'schedule-create' device_id box.box_id %}">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Name (optional)</label>
+                    <input type="text" name="display_name"
+                        class="w-full border rounded px-3 py-2"
+                        placeholder="z.B. Morgens">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Wochentage</label>
+                    <div class="flex gap-2 flex-wrap">
+                        {% for day, day_de in weekdays %}
+                            <label class="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full cursor-pointer">
+                                <input type="checkbox" name="days" value="{{ day }}">
+                                {{ day_de }}
+                            </label>
+                            {% endfor %}
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Uhrzeit</label>
+                    <input type="time" name="time"
+                        class="border rounded px-3 py-2">
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-primary text-white py-2 rounded font-bold hover:bg-hover">
+                    Speichern
+                </button>
+
+            </form>
+        </div>
+    </section>
+{% endblock %}
