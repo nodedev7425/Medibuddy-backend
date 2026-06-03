@@ -81,6 +81,9 @@ class Box(models.Model):
         on_delete=models.CASCADE,
         related_name='boxes'
     )
+    class Meta:
+        verbose_name = "Box"
+        verbose_name_plural = "Boxes"
 
 
 """

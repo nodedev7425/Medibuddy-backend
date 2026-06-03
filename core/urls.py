@@ -21,7 +21,7 @@ from django.contrib.auth.views import LoginView
 from api.forms import LoginForm
 
 from api.views import ScheduleConfigApiView, AlertApiView, UserAlertApiView
-from core.views import devices, device_detail, box_detail
+from core.views import devices, device_detail, box_detail, schedule_create, schedule_delete
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
@@ -47,11 +47,15 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('accounts/', include("django.contrib.auth.urls")),
-    
+
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
 
     path('api/config', ScheduleConfigApiView.as_view(), name='api-config'),
     path('api/alert', AlertApiView.as_view(), name='api-alert'),
-    path('api/alert/me', UserAlertApiView.as_view(), name='api-alert-me')
+    path('api/alert/me', UserAlertApiView.as_view(), name='api-alert-me'),
+
+    path('device/<uuid:device_id>/box/<uuid:box_id>/', box_detail, name='box-detail'),
+    path('device/<uuid:device_id>/box/<uuid:box_id>/schedule/create/', schedule_create, name='schedule-create'),
+    path('device/<uuid:device_id>/box/<uuid:box_id>/schedule/<uuid:schedule_id>/delete/', schedule_delete, name='schedule-delete'),
 ]
