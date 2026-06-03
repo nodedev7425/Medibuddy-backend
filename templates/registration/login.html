@@ -6,7 +6,7 @@
     <title>Login</title>
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
   </head>
-  <body class="bg-login min-h-screen flex justify-center bg-white my-20 mx-4">
+  <body class="bg-login min-h-screen flex items-center lg:items-start justify-center bg-white my-20 mx-4">
     <form method="post" class="w-lg h-full bg-light px-8 lg:px-12 py-12 rounded-lg shadow">
       {% csrf_token %}
       {% if form.non_field_errors %}
