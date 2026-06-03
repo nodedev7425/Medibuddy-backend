@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="py-8 px-14">
+   <div class="flex flex-row items-center justify-between mb-6">
+        <a href="{% url 'devices' %}">
+            <img src="{% static 'icons/arrow-left.svg' %}" class="w-8 h-8">
+        </a>
+
+        <h1 class="text-2xl font-bold">
+            {{ device.name }}
+        </h1>
+
+        <div class="w-8"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+
+        {% for box in boxes %}
+        <a href="{% url 'box-detail' device.device_id box.box_id %}" class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition flex items-center justify-center flex-col">
+            <img src="{% static 'icons/pill.svg' %}" class="w-24 h-24">
+            <h2 class="font-bold">{{ box.display_name }}</h2>
+        </a>
+        {% empty %}
+        <p>Keine Boxen gefunden.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

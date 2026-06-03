@@ -13,8 +13,7 @@
 
         {% for device in devices %}
 
-        <a href="{% url 'device-detail' device.device_id %}"
-           class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition flex items-center justify-center flex-col">
+        <a href="{% url 'device-detail' device.device_id %}" class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition flex items-center justify-center flex-col">
 
             <img src="{% static 'icons/device.svg' %}"
                  class="w-30 h-30">
